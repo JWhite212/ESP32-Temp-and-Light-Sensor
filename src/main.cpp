@@ -25,9 +25,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 
-
 #define DHTPIN D7// Digital pin connected to the DHT sensor
-
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 
 // Initialize DHT sensor.
@@ -38,7 +36,6 @@ void setup() {
   Serial.println(F("DHTxx test!"));
 
   dht.begin();
-
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("SSD1306 allocation failed"));
@@ -64,7 +61,6 @@ void loop() {
   // Compute heat index in Celsius (isFahreheit = false)
   float hic = dht.computeHeatIndex(t, h, false);
 
-
   Serial.print(F("Humidity: "));
   Serial.print(h);
   Serial.print(F("%  Temperature: "));
@@ -73,7 +69,6 @@ void loop() {
   Serial.print(F("-- Heat index: "));
   Serial.print(hic);
   Serial.println(F("°C "));
-
 
 
   // clear display
@@ -94,7 +89,6 @@ void loop() {
   display.print("C");
 
   display.display();
-
 
   delay(5000);
 
