@@ -18,9 +18,6 @@
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library.
-// On an arduino UNO:       A4(SDA), A5(SCL)
-// On an arduino MEGA 2560: 20(SDA), 21(SCL)
-// On an arduino LEONARDO:   2(SDA),  3(SCL), ...
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -41,8 +38,7 @@ void setup() {
 
   // Initialize the I2C bus (BH1750 library doesn't do this automatically)
   Wire.begin();
-  // On esp8266 you can select SCL and SDA pins using Wire.begin(D4, D3);
-  // For Wemos / Lolin D1 Mini Pro and the Ambient Light shield use Wire.begin(D2, D1);
+
   lightMeter.begin();
   Serial.println(F("BH1750 Test begin"));
 
@@ -57,12 +53,6 @@ void setup() {
 
 void loop() {
   delay(5000);
-
-  float lux = lightMeter.readLightLevel();
-  Serial.print("Light: ");
-  Serial.print(lux);
-  Serial.println(" lx");
-  delay(1000);
 
    // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
@@ -85,6 +75,11 @@ void loop() {
   Serial.print(hic);
   Serial.println(F("°C "));
 
+  // Take light sensor reading and print it
+  float lux = lightMeter.readLightLevel();
+  Serial.print("Light: ");
+  Serial.print(lux);
+  Serial.println(" lx");
 
   // clear display
   display.clearDisplay();
