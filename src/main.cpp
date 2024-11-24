@@ -30,7 +30,7 @@ BH1750 lightMeter;
 
 // Initialize DHT sensor.
 DHT dht22(DHT22PIN, DHTTYPE);
-DHT dht11(DHT11PIN, DHTTYPE);
+DHT dht11(DHT11PIN, DHT11);
 
 
 void setup() {
