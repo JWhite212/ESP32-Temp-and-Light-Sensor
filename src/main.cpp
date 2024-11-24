@@ -24,17 +24,21 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 BH1750 lightMeter;
 
-#define DHTPIN D7// Digital pin connected to the DHT sensor
+#define DHT11PIN D6// Digital pin connected to the DHT11 sensor
+#define DHT22PIN D7// Digital pin connected to the DHT22 sensor
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 
 // Initialize DHT sensor.
-DHT dht(DHTPIN, DHTTYPE);
+DHT dht22(DHT22PIN, DHTTYPE);
+DHT dht11(DHT11PIN, DHTTYPE);
+
 
 void setup() {
   Serial.begin(115200);
   Serial.println(F("DHTxx test!"));
 
-  dht.begin();         //C: start the first measurement
+  dht22.begin();         //C: start the first measurement
+  dht11.begin();         //C: start the first measurement
 
   // Initialize the I2C bus (BH1750 library doesn't do this automatically)
   Wire.begin();
@@ -56,23 +60,46 @@ void loop() {
 
    // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  float h = dht.readHumidity();
+  float humidity22 = dht22.readHumidity();
   // Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-  if (isnan(h) || isnan(t)) {
-    Serial.println("Failed to read from DHT sensor!");
+  float temp22 = dht22.readTemperature();
+  if (isnan(humidity22) || isnan(temp22)) {
+    Serial.println("Failed to read from dht22 sensor!");
   }
 
   // Compute heat index in Celsius (isFahreheit = false)
-  float hic = dht.computeHeatIndex(t, h, false);
+  float hic = dht22.computeHeatIndex(temp22, humidity22, false);
 
   Serial.print(F("Humidity: "));
-  Serial.print(h);
+  Serial.print(humidity22);
   Serial.print(F("%  Temperature: "));
-  Serial.print(t);
+  Serial.print(temp22);
   Serial.print(F("°C "));
   Serial.print(F("-- Heat index: "));
   Serial.print(hic);
+  Serial.println(F("°C "));
+
+  delay(500);
+
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  float humidity11 = dht11.readHumidity();
+  // Read temperature as Celsius (the default)
+  float temp11 = dht11.readTemperature();
+  if (isnan(humidity11) || isnan(temp11)) {
+    Serial.println("Failed to read from dht11 sensor!");
+  }
+
+  // Compute heat index in Celsius (isFahreheit = false)
+  float hic11 = dht11.computeHeatIndex(temp11, humidity11, false);
+
+  Serial.print(F("Humidity: "));
+  Serial.print(humidity11);
+  Serial.print(F("%  Temperature: "));
+  Serial.print(temp11);
+  Serial.print(F("°C "));
+  Serial.print(F("-- Heat index: "));
+  Serial.print(hic11);
   Serial.println(F("°C "));
 
   // Take light sensor reading and print it
@@ -90,7 +117,7 @@ void loop() {
   display.print("Temperature: ");
   display.setTextSize(2);
   display.setCursor(0,10);
-  display.print(t);
+  display.print(temp22);
   display.print(" ");
   display.setTextSize(1);
   display.cp437(true);
@@ -111,7 +138,7 @@ void loop() {
   display.print("Humidity: ");
   display.setTextSize(2);
   display.setCursor(0, 10);
-  display.print(h);
+  display.print(humidity22);
   display.print(" %");
 
   display.display();
