@@ -42,7 +42,7 @@ void setup() {
 
   dht22.begin();         //C: start the first measurement
   dht11.begin();         //C: start the first measurement
-  dht112.begin();         //C: start the first measurement
+  dht112.begin();        //C: start the first measurement
 
 
   // Initialize the I2C bus (BH1750 library doesn't do this automatically)
